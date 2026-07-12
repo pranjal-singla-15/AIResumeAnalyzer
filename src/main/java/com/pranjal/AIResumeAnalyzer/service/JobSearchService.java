@@ -1,6 +1,6 @@
 package com.pranjal.AIResumeAnalyzer.service;
 
-import com.pranjal.AIResumeAnalyzer.dto.JobSearchResponse;
+import com.pranjal.AIResumeAnalyzer.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -12,12 +12,18 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class JobSearchService {
 
     @Autowired
     public RestTemplate restTemplate;
+
+    @Autowired
+    private AiAnalysisService aiAnalysisService;
 
     @Value("${rapidapi.key}")
     private String apiKey;
@@ -48,5 +54,101 @@ public class JobSearchService {
 
         return response.getBody();
 
+    }
+
+    public SearchJobsWithMatchResponse searchJobsWithMatch(String query, List<String> resumeSkills) {
+        // Get jobs from API
+        JobSearchResponse searchResponse = searchJobs(query);
+        List<JobDto> jobList =
+
+                searchResponse != null &&
+                        searchResponse.getData() != null
+
+                        ? searchResponse.getData().getJobs()
+
+                        : new ArrayList<>();
+
+        SearchJobsWithMatchResponse response = new SearchJobsWithMatchResponse();
+        response.setHasMatches(false);
+
+        if (jobList.isEmpty()) {
+            response.setJobsWithMatch(new ArrayList<>());
+            return response;
+        }
+
+        // If skills are provided, match jobs
+        List<JobWithMatchDto> jobsWithMatch = new ArrayList<>();
+
+        if (resumeSkills != null && !resumeSkills.isEmpty()) {
+            try {
+                // Get matches from AI service
+                JobMatchRequest matchRequest = new JobMatchRequest();
+                matchRequest.setResumeSkills(resumeSkills);
+                matchRequest.setJobs(jobList);
+
+                List<JobMatchResponse> matches = aiAnalysisService.matchJobs(matchRequest);
+
+                // Combine jobs with their match data
+                for (int i = 0; i < jobList.size(); i++) {
+                    JobWithMatchDto jobWithMatch = new JobWithMatchDto();
+                    JobDto job = jobList.get(i);
+
+                    // Copy job details
+                    jobWithMatch.setJobId(job.getJobId());
+                    jobWithMatch.setTitle(job.getTitle());
+                    jobWithMatch.setCompany(job.getCompany());
+                    jobWithMatch.setLocation(job.getLocation());
+                    jobWithMatch.setEmploymentType(job.getEmploymentType());
+                    jobWithMatch.setApplyLink(job.getApplyLink());
+                    jobWithMatch.setCompanyLogo(job.getCompanyLogo());
+                    jobWithMatch.setDescription(job.getDescription());
+                    jobWithMatch.setPostedAt(job.getPostedAt());
+
+                    // Add match data if available
+                    if (i < matches.size()) {
+                        JobMatchResponse match = matches.get(i);
+                        jobWithMatch.setMatchPercentage(match.getMatchPercentage());
+                        jobWithMatch.setMatchedSkills(match.getMatchedSkills());
+                        jobWithMatch.setMissingSkills(match.getMissingSkills());
+                        jobWithMatch.setSummary(match.getSummary());
+                    }
+
+                    jobsWithMatch.add(jobWithMatch);
+                }
+
+                response.setJobsWithMatch(jobsWithMatch);
+                response.setHasMatches(true);
+            } catch (Exception e) {
+                // If matching fails, return jobs without match data
+                System.err.println("Error matching jobs: " + e.getMessage());
+                jobsWithMatch = convertJobsToJobsWithMatch(jobList);
+                response.setJobsWithMatch(jobsWithMatch);
+                response.setHasMatches(false);
+            }
+        } else {
+            // No skills provided, return jobs without match data
+            jobsWithMatch = convertJobsToJobsWithMatch(jobList);
+            response.setJobsWithMatch(jobsWithMatch);
+        }
+
+        return response;
+    }
+
+    private List<JobWithMatchDto> convertJobsToJobsWithMatch(List<JobDto> jobs) {
+        List<JobWithMatchDto> result = new ArrayList<>();
+        for (JobDto job : jobs) {
+            JobWithMatchDto jobWithMatch = new JobWithMatchDto();
+            jobWithMatch.setJobId(job.getJobId());
+            jobWithMatch.setTitle(job.getTitle());
+            jobWithMatch.setCompany(job.getCompany());
+            jobWithMatch.setLocation(job.getLocation());
+            jobWithMatch.setEmploymentType(job.getEmploymentType());
+            jobWithMatch.setApplyLink(job.getApplyLink());
+            jobWithMatch.setCompanyLogo(job.getCompanyLogo());
+            jobWithMatch.setDescription(job.getDescription());
+            jobWithMatch.setPostedAt(job.getPostedAt());
+            result.add(jobWithMatch);
+        }
+        return result;
     }
 }

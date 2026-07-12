@@ -1,5 +1,6 @@
 package com.pranjal.AIResumeAnalyzer.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class JobSearchResponse {
 
-    private List<JobDto> jobs;
-
+    private DataDto data;
 }
