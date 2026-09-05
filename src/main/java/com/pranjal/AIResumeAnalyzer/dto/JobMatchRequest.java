@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class JobMatchRequest {
     private List<String> resumeSkills;
-    private List<JobDto> jobs;
+    private List<JobMatchJobPayload> jobs;
 }

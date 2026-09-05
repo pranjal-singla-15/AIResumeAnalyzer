@@ -82,9 +82,18 @@ public class JobSearchService {
         if (resumeSkills != null && !resumeSkills.isEmpty()) {
             try {
                 // Get matches from AI service
+                List<JobMatchJobPayload> jobPayloads = new ArrayList<>();
+                for (JobDto job : jobList) {
+                    jobPayloads.add(new JobMatchJobPayload(
+                            job.getTitle(),
+                            job.getCompany(),
+                            job.getDescription()
+                    ));
+                }
+
                 JobMatchRequest matchRequest = new JobMatchRequest();
                 matchRequest.setResumeSkills(resumeSkills);
-                matchRequest.setJobs(jobList);
+                matchRequest.setJobs(jobPayloads);
 
                 List<JobMatchResponse> matches = aiAnalysisService.matchJobs(matchRequest);
 

@@ -78,9 +78,10 @@ Rules:
 7. improvements should be actionable and practical.
 8. recommendedRoles must contain exactly 5 roles.
 9. skills should contain only technical skills.
-10. education should contain education details found in the resume.
-11. projects should contain project names or short project descriptions.
-12. experience should contain internships, work experience, leadership positions, or responsibilities.
+10. education, projects, and experience must each be a JSON array of plain strings only — never objects or nested fields.
+11. education: one string per entry, formatted like "Degree, Institution, Year (CGPA if available)".
+12. projects: one string per entry, a short project name/description.
+13. experience: one string per entry, formatted like "Title, Company/Organization, Dates — brief description of responsibilities".
 
 Resume:
 
