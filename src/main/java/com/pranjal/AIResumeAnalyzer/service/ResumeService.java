@@ -46,6 +46,7 @@ public class ResumeService {
         Resume resume = new Resume();
 
         resume.setFileUrl(savedPath);
+        resume.setOriginalFileName(file.getOriginalFilename());
         resume.setExtractedText(extractedText);
         resume.setUser(currentUser);
         resume.setCreatedAt(LocalDateTime.now());
@@ -86,10 +87,28 @@ public class ResumeService {
 
         return resumes.stream().map(r -> new ResumeSummaryDto(
                 r.getId(),
-                Paths.get(r.getFileUrl()).getFileName().toString(),
+                resolveDisplayFileName(r),
                 r.getAtsScore(),
                 r.getCreatedAt()
         )).collect(Collectors.toList());
+    }
+
+    private static final java.util.regex.Pattern UUID_PREFIX_PATTERN =
+            java.util.regex.Pattern.compile(
+                    "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}_"
+            );
+
+    private String resolveDisplayFileName(Resume resume) {
+
+        if (resume.getOriginalFileName() != null) {
+            return resume.getOriginalFileName();
+        }
+
+        String diskFileName =
+                Paths.get(resume.getFileUrl()).getFileName().toString();
+
+        return UUID_PREFIX_PATTERN.matcher(diskFileName)
+                .replaceFirst("");
     }
 
     private void validateFile(MultipartFile file) {

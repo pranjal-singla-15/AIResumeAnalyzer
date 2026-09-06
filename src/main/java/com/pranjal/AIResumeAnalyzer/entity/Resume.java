@@ -19,6 +19,8 @@ public class Resume {
 
     private String fileUrl;
 
+    private String originalFileName;
+
     @Column(columnDefinition = "TEXT")
     private String extractedText;
 
