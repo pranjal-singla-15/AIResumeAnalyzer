@@ -7,9 +7,13 @@ import EmptyState from '../components/EmptyState'
 
 function ScoreBadge({ score }) {
   if (score === null || score === undefined) {
-    return <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">Not analyzed</span>
+    return <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">Not analyzed</span>
   }
-  const color = score >= 75 ? 'bg-green-100 text-green-700' : score >= 50 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+  const color = score >= 75
+    ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
+    : score >= 50
+      ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400'
+      : 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400'
   return <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${color}`}>ATS {score}</span>
 }
 
@@ -54,18 +58,18 @@ export default function Dashboard(){
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-extrabold text-gray-900">
+        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
           {email ? `Welcome back, ${email.split('@')[0]}` : 'Welcome back'}
         </h1>
-        <p className="text-gray-500 mt-1">Here's what's happening with your job search.</p>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">Here's what's happening with your job search.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="font-semibold text-gray-800 mb-1">Upload Resume</h3>
-              <p className="text-sm text-gray-500">Get your ATS score, strengths & improvements.</p>
+              <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-1">Upload Resume</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Get your ATS score, strengths & improvements.</p>
             </div>
             <span className="text-2xl">📤</span>
           </div>
@@ -76,8 +80,8 @@ export default function Dashboard(){
         <Card>
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="font-semibold text-gray-800 mb-1">Search Jobs</h3>
-              <p className="text-sm text-gray-500">Find roles that match your skills & location.</p>
+              <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-1">Search Jobs</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Find roles that match your skills & location.</p>
             </div>
             <span className="text-2xl">🔍</span>
           </div>
@@ -88,22 +92,22 @@ export default function Dashboard(){
         <Card>
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="font-semibold text-gray-800 mb-1">Resumes on file</h3>
-              <p className="text-sm text-gray-500">Total resumes you've uploaded.</p>
+              <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-1">Resumes on file</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total resumes you've uploaded.</p>
             </div>
             <span className="text-2xl">📄</span>
           </div>
-          <div className="mt-4 text-3xl font-extrabold text-indigo-600">{loading ? '—' : resumes.length}</div>
+          <div className="mt-4 text-3xl font-extrabold text-indigo-600 dark:text-purple-400">{loading ? '—' : resumes.length}</div>
         </Card>
       </div>
 
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Your Resumes</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Your Resumes</h2>
 
         {loading && <Spinner label="Loading your resumes..." />}
 
         {!loading && error && (
-          <div className="p-4 bg-red-50 border border-red-100 text-red-700 rounded-lg text-sm">{error}</div>
+          <div className="p-4 bg-red-50 border border-red-100 text-red-700 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400 rounded-lg text-sm">{error}</div>
         )}
 
         {!loading && !error && resumes.length === 0 && (
@@ -118,15 +122,15 @@ export default function Dashboard(){
         {!loading && !error && resumes.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {resumes.map(r => (
-              <div key={r.id} className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 flex flex-col justify-between hover:shadow-xl transition">
+              <div key={r.id} className="bg-white dark:bg-gray-900/70 rounded-2xl shadow-lg dark:shadow-purple-950/40 border border-gray-100 dark:border-purple-900/30 p-5 flex flex-col justify-between hover:shadow-xl transition-colors duration-300">
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-2xl">📄</span>
                     <ScoreBadge score={r.atsScore} />
                   </div>
-                  <p className="font-medium text-gray-800 truncate" title={r.fileName}>{r.fileName}</p>
+                  <p className="font-medium text-gray-800 dark:text-gray-100 truncate" title={r.fileName}>{r.fileName}</p>
                   {r.createdAt && (
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                       Uploaded {new Date(r.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
                     </p>
                   )}
@@ -134,14 +138,14 @@ export default function Dashboard(){
                 <div className="flex gap-2 mt-4">
                   <button
                     onClick={() => navigate(`/analyze/${r.id}`)}
-                    className="flex-1 px-3 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-medium hover:bg-indigo-100 transition"
+                    className="flex-1 px-3 py-2 bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300 rounded-lg text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-500/25 transition"
                   >
                     {r.atsScore ? 'View Analysis' : 'Analyze'}
                   </button>
                   <button
                     onClick={() => handleDelete(r.id)}
                     disabled={deletingId === r.id}
-                    className="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition disabled:opacity-50"
+                    className="px-3 py-2 bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400 rounded-lg text-sm font-medium hover:bg-red-100 dark:hover:bg-red-500/20 transition disabled:opacity-50"
                   >
                     {deletingId === r.id ? '...' : 'Delete'}
                   </button>

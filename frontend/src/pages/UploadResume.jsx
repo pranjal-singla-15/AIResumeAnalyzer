@@ -54,18 +54,20 @@ export default function UploadResume(){
   return (
     <div className="max-w-xl mx-auto mt-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-gray-900">Upload your resume</h1>
-        <p className="text-gray-500 mt-1 text-sm">PDF only. We'll extract the text and run it through our AI analyzer.</p>
+        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100">Upload your resume</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">PDF only. We'll extract the text and run it through our AI analyzer.</p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+      <div className="bg-white dark:bg-gray-900/70 rounded-2xl shadow-xl dark:shadow-purple-950/40 border border-gray-100 dark:border-purple-900/30 p-8 transition-colors duration-300">
         <div
           onDragOver={(e)=>{ e.preventDefault(); setDragActive(true) }}
           onDragLeave={()=> setDragActive(false)}
           onDrop={onDrop}
           onClick={()=> inputRef.current?.click()}
           className={`cursor-pointer rounded-xl border-2 border-dashed p-10 text-center transition ${
-            dragActive ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300 hover:border-indigo-400 hover:bg-gray-50'
+            dragActive
+              ? 'border-indigo-500 bg-indigo-50 dark:border-purple-500 dark:bg-purple-500/10'
+              : 'border-gray-300 hover:border-indigo-400 hover:bg-gray-50 dark:border-gray-700 dark:hover:border-purple-500 dark:hover:bg-gray-800/50'
           }`}
         >
           <input
@@ -78,19 +80,19 @@ export default function UploadResume(){
           <div className="text-4xl mb-3">{file ? '📄' : '📁'}</div>
           {file ? (
             <>
-              <p className="font-medium text-gray-800">{file.name}</p>
-              <p className="text-xs text-gray-500 mt-1">{(file.size / 1024).toFixed(0)} KB — click to change</p>
+              <p className="font-medium text-gray-800 dark:text-gray-100">{file.name}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{(file.size / 1024).toFixed(0)} KB — click to change</p>
             </>
           ) : (
             <>
-              <p className="font-medium text-gray-700">Drag & drop your resume here</p>
-              <p className="text-xs text-gray-500 mt-1">or click to browse (PDF only)</p>
+              <p className="font-medium text-gray-700 dark:text-gray-300">Drag & drop your resume here</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">or click to browse (PDF only)</p>
             </>
           )}
         </div>
 
         {error && (
-          <div className="mt-4 p-3 bg-red-50 border border-red-100 text-red-700 rounded-lg text-sm">{error}</div>
+          <div className="mt-4 p-3 bg-red-50 border border-red-100 text-red-700 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400 rounded-lg text-sm">{error}</div>
         )}
 
         <button

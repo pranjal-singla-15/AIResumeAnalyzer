@@ -37,23 +37,23 @@ export default function Login(){
 
   return (
     <div className="max-w-md mx-auto mt-10">
-      <form onSubmit={submit} className="space-y-5 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+      <form onSubmit={submit} className="space-y-5 bg-white dark:bg-gray-900/70 p-8 rounded-2xl shadow-xl dark:shadow-purple-950/40 border border-gray-100 dark:border-purple-900/30 transition-colors duration-300">
         <div>
-          <h2 className="text-3xl font-extrabold text-gray-900">Welcome back</h2>
-          <p className="text-gray-500 mt-1 text-sm">Log in to continue to your dashboard</p>
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">Welcome back</h2>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">Log in to continue to your dashboard</p>
         </div>
 
         {error && (
-          <div className="p-3 bg-red-50 border border-red-100 text-red-700 rounded-lg text-sm">
+          <div className="p-3 bg-red-50 border border-red-100 text-red-700 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400 rounded-lg text-sm">
             {error}
           </div>
         )}
 
         <div className="space-y-1">
-          <label className="text-sm font-medium text-gray-700">Email</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
           <input
             type="email"
-            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            className="w-full p-3 border border-gray-200 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-100 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-purple-500 focus:border-transparent transition"
             placeholder="you@example.com"
             value={email}
             onChange={e=>setEmail(e.target.value)}
@@ -61,10 +61,10 @@ export default function Login(){
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-medium text-gray-700">Password</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
           <input
             type="password"
-            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            className="w-full p-3 border border-gray-200 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-100 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-purple-500 focus:border-transparent transition"
             placeholder="••••••••"
             value={password}
             onChange={e=>setPassword(e.target.value)}
@@ -78,9 +78,9 @@ export default function Login(){
           {loading ? 'Logging in...' : 'Login'}
         </button>
 
-        <p className="text-center text-sm text-gray-500">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400">
           Don't have an account?{' '}
-          <Link to="/register" className="text-indigo-600 font-medium hover:underline">Register</Link>
+          <Link to="/register" className="text-indigo-600 dark:text-purple-400 font-medium hover:underline">Register</Link>
         </p>
       </form>
     </div>
