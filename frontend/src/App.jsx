@@ -12,7 +12,7 @@ import { isAuthed as checkAuthed } from './utils/auth'
 export default function App(){
   const isAuthed = checkAuthed()
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-transparent transition-colors duration-300">
       <Navbar />
       <main className="p-6 max-w-6xl mx-auto">
         <Routes>

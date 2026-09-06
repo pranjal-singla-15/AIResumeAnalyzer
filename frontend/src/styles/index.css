@@ -3,4 +3,11 @@
 @tailwind utilities;
 
 html, body, #root { height: 100%; }
-body { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); }
+body {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+html.dark body {
+  background: linear-gradient(160deg, #0b0713 0%, #150c29 45%, #1e1033 75%, #0b0713 100%);
+  background-attachment: fixed;
+}
