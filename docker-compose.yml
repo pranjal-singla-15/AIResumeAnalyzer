@@ -1,0 +1,52 @@
+services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: ai_resume_backend
+    restart: always
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/resume_ai
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      AI_SERVICE_URL: http://ai-service:8000
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    depends_on:
+      - ai-service
+
+
+  ai-service:
+    build:
+      context: "./python apis ai_resume_analyzer"
+
+    container_name: ai_resume_ai
+    restart: always
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - "./python apis ai_resume_analyzer/.env"
+
+
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: ai_resume_frontend
+    restart: always
+
+    ports:
+      - "5173:80"
+
+    depends_on:
+      - backend
