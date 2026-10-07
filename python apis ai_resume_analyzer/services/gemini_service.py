@@ -19,9 +19,9 @@ from schemas.parsed_resume import (
 class AIService:
 
     def __init__(self):
-        api_key = os.getenv("GEMINI_API_KEY")
+        api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
-            raise RuntimeError("GEMINI_API_KEY environment variable is not set")
+            raise RuntimeError("GROQ_API_KEY environment variable is not set")
         
         self.client = Groq(
             api_key=api_key

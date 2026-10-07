@@ -51,8 +51,10 @@ dist/
 **/dist/
 
 ### Application secrets ###
-application.properties
-**/application.properties
+# application.properties itself is now committed (env-var driven, no
+# hardcoded secrets). Only the local-only override file is ignored.
+application-local.properties
+**/application-local.properties
 
 ### Uploaded files ###
 uploads/
