@@ -15,8 +15,8 @@ public class UserController {
 
     private final AuthService authService;
 
-    // Lightweight endpoint used by the frontend to verify Basic Auth
-    // credentials on login. Deliberately does NOT touch any other
+    // Lightweight endpoint used by the frontend to verify the JWT
+    // and fetch the current user. Deliberately does NOT touch any other
     // service (AI service, resume service, etc.) so login can never
     // fail because of an unrelated dependency being down.
     @GetMapping("/me")

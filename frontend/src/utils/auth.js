@@ -9,7 +9,7 @@ export function getAuthToken(){
 
 export function getAuthHeader(){
   const t = getAuthToken()
-  return t ? { Authorization: `Basic ${t}` } : {}
+  return t ? { Authorization: `Bearer ${t}` } : {}
 }
 
 export function logout(){

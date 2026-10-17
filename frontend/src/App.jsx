@@ -9,8 +9,17 @@ import AnalyzeResults from './pages/AnalyzeResults'
 import JobSearch from './pages/JobSearch'
 import { isAuthed as checkAuthed } from './utils/auth'
 
+// Checks the token on every render, so a fresh login (or logout) takes
+// effect immediately instead of using a value captured when App mounted.
+function RequireAuth({ children }){
+  return checkAuthed() ? children : <Navigate to="/login" replace />
+}
+
+function Fallback(){
+  return <Navigate to={checkAuthed() ? "/" : "/login"} replace />
+}
+
 export default function App(){
-  const isAuthed = checkAuthed()
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-transparent transition-colors duration-300">
       <Navbar />
@@ -18,11 +27,11 @@ export default function App(){
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/upload" element={isAuthed ? <UploadResume /> : <Navigate to="/login" />} />
-          <Route path="/analyze/:resumeId" element={isAuthed ? <AnalyzeResults /> : <Navigate to="/login" />} />
-          <Route path="/jobs" element={isAuthed ? <JobSearch /> : <Navigate to="/login" />} />
-          <Route path="/" element={isAuthed ? <Dashboard /> : <Navigate to="/login" />} />
-          <Route path="*" element={<Navigate to={isAuthed ? "/" : "/login"} />} />
+          <Route path="/upload" element={<RequireAuth><UploadResume /></RequireAuth>} />
+          <Route path="/analyze/:resumeId" element={<RequireAuth><AnalyzeResults /></RequireAuth>} />
+          <Route path="/jobs" element={<RequireAuth><JobSearch /></RequireAuth>} />
+          <Route path="/" element={<RequireAuth><Dashboard /></RequireAuth>} />
+          <Route path="*" element={<Fallback />} />
         </Routes>
       </main>
     </div>
