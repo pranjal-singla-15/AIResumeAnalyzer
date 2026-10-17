@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import axios from 'axios'
+import api from '../utils/api'
 import { useNavigate, Link } from 'react-router-dom'
 import { setAuth } from '../utils/auth'
 
@@ -16,11 +16,9 @@ export default function Login(){
     if(!email || !password) return setError('Please enter both email and password')
     setLoading(true)
     try{
-      const token = btoa(`${email}:${password}`)
-      // Validate credentials against a dedicated, lightweight auth-check
-      // endpoint (doesn't depend on the AI service or any other feature).
-      await axios.get('/api/user/me', { headers: { Authorization: `Basic ${token}` } })
-      setAuth(token, email)
+      // Exchange credentials for a JWT, sent as a Bearer token on later requests.
+      const res = await api.post('/api/public/login', { email, password })
+      setAuth(res.data, email)
       navigate('/')
     }catch(err){
       console.error(err)

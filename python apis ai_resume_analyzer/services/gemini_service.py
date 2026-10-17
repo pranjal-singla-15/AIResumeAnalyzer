@@ -251,10 +251,12 @@ class AIService:
                         "jobTitle",
                         ""
                     ),
-                    matchPercentage=item.get(
+                    # Gemini sometimes returns decimals (e.g. 66.67);
+                    # the schema and the Java DTO both expect an int.
+                    matchPercentage=round(float(item.get(
                         "matchPercentage",
                         0
-                    ),
+                    ) or 0)),
                     matchedSkills=item.get(
                         "matchedSkills",
                         []
